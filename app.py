@@ -106,13 +106,26 @@ def render_intake():
         c1, c2 = st.columns(2)
         c1.markdown(f"**Claimant**  \n{sc['claimant']}")
         c2.markdown(f"**Respondent**  \n{sc['respondent']}")
-        st.markdown(f"**Claim type:** {sc['claim_type']}")
-        st.markdown(f"**Principal balance:** ${sc['principal_balance']:,.2f}  |  **Fees claimed:** ${sc['fees_claimed']:,.2f}")
-        st.markdown(f"**Interest:** {sc['interest_note']}")
-        st.markdown(f"**Key dates:** {', '.join(sc['key_dates'])}")
-        st.markdown(f"**Relief sought:** {sc['relief_sought']}")
+        with st.form("intake_edit_form"):
+            claim_type = st.text_input("Claim type", value=sc["claim_type"])
+            col1, col2 = st.columns(2)
+            principal_balance = col1.number_input("Principal balance ($)", value=float(sc["principal_balance"]), min_value=0.0, format="%.2f")
+            fees_claimed = col2.number_input("Fees claimed ($)", value=float(sc["fees_claimed"]), min_value=0.0, format="%.2f")
+            interest_note = st.text_input("Interest note", value=sc["interest_note"])
+            key_dates = st.text_input("Key dates (comma-separated)", value=", ".join(sc["key_dates"]))
+            relief_sought = st.text_area("Relief sought", value=sc["relief_sought"], height=80)
+            intake_saved = st.form_submit_button("Save changes")
+        if intake_saved:
+            sc["claim_type"] = claim_type
+            sc["principal_balance"] = principal_balance
+            sc["fees_claimed"] = fees_claimed
+            sc["interest_note"] = interest_note
+            sc["key_dates"] = [d.strip() for d in key_dates.split(",") if d.strip()]
+            sc["relief_sought"] = relief_sought.strip()
+            st.session_state.case.structured_claim = sc
+            st.toast("Saved")
         st.markdown("#### Completeness check")
-        for item in sc["completeness"]:
+        for item in st.session_state.case.structured_claim["completeness"]:
             label = item["label"] + (f" - {item['note']}" if item.get("note") else "")
             if item["status"] == "present":
                 st.success(label)
@@ -184,13 +197,20 @@ def render_respond():
             case.submissions.append(Submission(kind="defense", author=case.respondent, content=str(d.model_dump())))
     d = st.session_state.defense
     if d:
-        st.markdown("**Admitted:**")
-        for a in d["admitted"]:
-            st.write("- " + a)
-        st.markdown("**Disputed:**")
-        for a in d["disputed"]:
-            st.write("- " + a)
-        st.markdown(f"**Requested relief:** {d['requested_relief']}")
+        with st.form("defense_edit_form"):
+            admitted_text = st.text_area("Admitted (one item per line)", value="\n".join(d["admitted"]), height=120)
+            disputed_text = st.text_area("Disputed (one item per line)", value="\n".join(d["disputed"]), height=120)
+            relief_text = st.text_area("Requested relief", value=d["requested_relief"], height=80)
+            defense_saved = st.form_submit_button("Save defense")
+        if defense_saved:
+            d["admitted"] = [line.strip() for line in admitted_text.splitlines() if line.strip()]
+            d["disputed"] = [line.strip() for line in disputed_text.splitlines() if line.strip()]
+            d["requested_relief"] = relief_text.strip()
+            st.session_state.defense = d
+            for sub in case.submissions:
+                if sub.kind == "defense":
+                    sub.content = str(d)
+            st.toast("Saved")
 
 
 def render_review():
@@ -232,18 +252,38 @@ def render_award():
     aw = st.session_state.case.draft_award
     if aw:
         st.divider()
-        st.markdown("**Background**")
-        st.write(aw["background"])
-        st.markdown("**Issues for determination**")
-        for i in aw["issues"]:
-            st.write("- " + i)
-        st.markdown("**Findings and reasoning**")
-        for f in aw["findings"]:
-            st.markdown(f"- **{f['issue']}** - _{f['ruling']}_")
-            st.write("  " + f["reasoning"])
-        st.markdown("**Decision**")
-        st.text_area("Decision (editable by the arbitrator)", value=aw["decision"], height=130, key="award_decision_edit")
-        st.metric("Amount awarded", f"${aw['amount_awarded']:,.2f}")
+        RULING_OPTIONS = ["credited", "disallowed", "rejected", "granted"]
+        with st.form("award_edit_form"):
+            st.markdown("**Background**")
+            background = st.text_area("Background", value=aw["background"], height=120, label_visibility="collapsed")
+            st.markdown("**Issues for determination**")
+            for i in aw["issues"]:
+                st.write("- " + i)
+            st.markdown("**Findings and reasoning**")
+            updated_findings = []
+            for idx, f in enumerate(aw["findings"]):
+                st.markdown(f"_Finding {idx + 1}_")
+                col1, col2 = st.columns([3, 1])
+                issue = col1.text_input("Issue", value=f["issue"], key=f"finding_issue_{idx}")
+                ruling = col2.selectbox(
+                    "Ruling", options=RULING_OPTIONS,
+                    index=RULING_OPTIONS.index(f["ruling"]) if f["ruling"] in RULING_OPTIONS else 0,
+                    key=f"finding_ruling_{idx}",
+                )
+                reasoning = st.text_area("Reasoning", value=f["reasoning"], key=f"finding_reasoning_{idx}", height=80)
+                updated_findings.append({"issue": issue, "ruling": ruling, "reasoning": reasoning})
+            st.markdown("**Decision**")
+            decision = st.text_area("Decision", value=aw["decision"], height=130)
+            amount = st.number_input("Amount awarded ($)", value=float(aw["amount_awarded"]), min_value=0.0, format="%.2f")
+            award_saved = st.form_submit_button("Save award")
+        if award_saved:
+            aw["background"] = background
+            aw["findings"] = updated_findings
+            aw["decision"] = decision
+            aw["amount_awarded"] = amount
+            st.session_state.case.draft_award = aw
+            st.toast("Saved")
+        st.metric("Amount awarded", f"${st.session_state.case.draft_award['amount_awarded']:,.2f}")
 
 
 RENDERERS = {

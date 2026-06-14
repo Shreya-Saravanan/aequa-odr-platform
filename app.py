@@ -28,6 +28,8 @@ if "defense" not in st.session_state:
     st.session_state.defense = None
 if "validation" not in st.session_state:
     st.session_state.validation = None
+if not hasattr(st.session_state.case, "award_finalized"):
+    st.session_state.case.award_finalized = False
 
 # ---- system prompts ----
 INTAKE_SYSTEM = (
@@ -87,6 +89,58 @@ def get_record_text(case) -> str:
     parts.append("--- HEARING TRANSCRIPT ---")
     parts.append(case.hearing_transcript)
     return "\n".join(parts)
+
+
+def award_to_markdown(case) -> str:
+    aw = case.draft_award
+    lines = [
+        "# ARBITRAL AWARD",
+        "",
+        f"**Case No.:** {case.case_id}  ",
+        f"**{case.claimant} v. {case.respondent}**  ",
+        "**Seat:** Boston, MA  ",
+        "**Rules:** AAA Consumer Arbitration Rules  ",
+        "**Governing Law:** Federal Arbitration Act and Massachusetts law  ",
+        "",
+        "---",
+        "",
+        "## I. Background",
+        "",
+        aw["background"],
+        "",
+        "## II. Issues for Determination",
+        "",
+    ]
+    for i, issue in enumerate(aw["issues"], 1):
+        lines.append(f"{i}. {issue}")
+    lines += ["", "## III. Findings and Reasoning", ""]
+    for i, f in enumerate(aw["findings"], 1):
+        lines += [
+            f"### {i}. {f['issue']}",
+            "",
+            f"**Ruling:** {f['ruling'].capitalize()}",
+            "",
+            f["reasoning"],
+            "",
+        ]
+    lines += [
+        "## IV. Decision",
+        "",
+        aw["decision"],
+        "",
+        f"**AMOUNT AWARDED: ${aw['amount_awarded']:,.2f}**",
+        "",
+        "---",
+        "",
+        "_________________  ",
+        "**Arbitrator**  ",
+        "Date: ____________________",
+        "",
+        "---",
+        "",
+        f"*{DISCLAIMER}*",
+    ]
+    return "\n".join(lines)
 
 
 def render_intake():
@@ -284,6 +338,57 @@ def render_award():
             st.session_state.case.draft_award = aw
             st.toast("Saved")
         st.metric("Amount awarded", f"${st.session_state.case.draft_award['amount_awarded']:,.2f}")
+
+        st.divider()
+        if st.toggle("Preview final award"):
+            aw = st.session_state.case.draft_award
+            st.markdown(
+                "<h1 style='text-align:center;'>ARBITRAL AWARD</h1>",
+                unsafe_allow_html=True,
+            )
+            st.markdown(
+                f"<p style='text-align:center;'>"
+                f"<b>Case No.:</b> {case.case_id}&nbsp;&nbsp;|&nbsp;&nbsp;"
+                f"<b>{case.claimant} v. {case.respondent}</b><br>"
+                f"Seat: Boston, MA &nbsp;|&nbsp; AAA Consumer Arbitration Rules<br>"
+                f"Governed by the FAA and Massachusetts law"
+                f"</p>",
+                unsafe_allow_html=True,
+            )
+            st.divider()
+            st.markdown("## I. Background")
+            st.write(aw["background"])
+            st.markdown("## II. Issues for Determination")
+            for i, issue in enumerate(aw["issues"], 1):
+                st.write(f"{i}. {issue}")
+            st.markdown("## III. Findings and Reasoning")
+            for i, f in enumerate(aw["findings"], 1):
+                st.markdown(f"### {i}. {f['issue']}")
+                st.markdown(f"**Ruling:** {f['ruling'].capitalize()}")
+                st.write(f["reasoning"])
+            st.markdown("## IV. Decision")
+            st.write(aw["decision"])
+            st.markdown(f"**AMOUNT AWARDED: ${aw['amount_awarded']:,.2f}**")
+            st.divider()
+            st.markdown("\_________________  \n**Arbitrator**  \nDate: ____________________")
+            st.divider()
+            st.caption(DISCLAIMER)
+
+        col_fin, col_dl = st.columns(2)
+        with col_fin:
+            if not st.session_state.case.award_finalized:
+                if st.button("Finalize award"):
+                    st.session_state.case.award_finalized = True
+                    st.success("Award finalized.")
+            else:
+                st.success("Award finalized.")
+        with col_dl:
+            st.download_button(
+                "Download award (Markdown)",
+                data=award_to_markdown(st.session_state.case),
+                file_name=f"award_{case.case_id}.md",
+                mime="text/markdown",
+            )
 
 
 RENDERERS = {

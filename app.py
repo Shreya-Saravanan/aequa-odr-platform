@@ -404,6 +404,17 @@ with st.sidebar:
     st.caption(f"Stage {STAGES.index(st.session_state.stage) + 1} of {len(STAGES)}")
     st.divider()
     st.caption(f"Case: {st.session_state.case.title}")
+    st.markdown("**Case file**")
+    _c = st.session_state.case
+    _chk = lambda ok: "✅" if ok else "—"
+    st.caption(f"📄 Documents: {len(_c.documents)}")
+    st.caption(f"{_chk(_c.structured_claim)} Structured claim")
+    _has_defense = any(s.kind == "defense" for s in _c.submissions)
+    st.caption(f"{_chk(_has_defense)} Defense submitted")
+    st.caption(f"💬 Review Q&A: {len(st.session_state.review_history)}")
+    _award_ok = _c.draft_award is not None
+    _finalized = getattr(_c, "award_finalized", False)
+    st.caption(f"{_chk(_award_ok)} Draft award{'  🔒 Finalized' if _finalized else ''}")
 
 st.markdown(f"### {st.session_state.stage}")
 st.caption(f"{st.session_state.case.title}  |  {st.session_state.case.case_id}  |  Viewing as: {st.session_state.persona}")

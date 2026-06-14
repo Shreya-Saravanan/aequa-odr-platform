@@ -28,8 +28,8 @@ if "defense" not in st.session_state:
     st.session_state.defense = None
 if "validation" not in st.session_state:
     st.session_state.validation = None
-if not hasattr(st.session_state.case, "award_finalized"):
-    st.session_state.case.award_finalized = False
+if "award_finalized" not in st.session_state:
+    st.session_state.award_finalized = False
 
 # ---- system prompts ----
 INTAKE_SYSTEM = (
@@ -376,9 +376,9 @@ def render_award():
 
         col_fin, col_dl = st.columns(2)
         with col_fin:
-            if not st.session_state.case.award_finalized:
+            if not st.session_state.award_finalized:
                 if st.button("Finalize award"):
-                    st.session_state.case.award_finalized = True
+                    st.session_state.award_finalized = True
                     st.success("Award finalized.")
             else:
                 st.success("Award finalized.")
@@ -413,7 +413,7 @@ with st.sidebar:
     st.caption(f"{_chk(_has_defense)} Defense submitted")
     st.caption(f"💬 Review Q&A: {len(st.session_state.review_history)}")
     _award_ok = _c.draft_award is not None
-    _finalized = getattr(_c, "award_finalized", False)
+    _finalized = st.session_state.award_finalized
     st.caption(f"{_chk(_award_ok)} Draft award{'  🔒 Finalized' if _finalized else ''}")
 
 st.markdown(f"### {st.session_state.stage}")

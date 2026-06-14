@@ -179,12 +179,12 @@ def render_intake():
             st.session_state.case.structured_claim = sc
             st.toast("Saved")
         st.markdown("#### Completeness check")
-        for item in st.session_state.case.structured_claim["completeness"]:
-            label = item["label"] + (f" - {item['note']}" if item.get("note") else "")
-            if item["status"] == "present":
-                st.success(label)
-            else:
-                st.warning("Missing: " + label)
+        _items = st.session_state.case.structured_claim["completeness"]
+        for item in sorted(_items, key=lambda x: x["status"] != "present"):
+            icon = "✅" if item["status"] == "present" else "⚠️"
+            st.markdown(f"{icon} &nbsp; **{item['label']}**")
+            if item.get("note"):
+                st.caption(f"    {item['note']}")
 
 
 def render_validate():

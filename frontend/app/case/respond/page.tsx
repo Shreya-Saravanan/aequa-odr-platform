@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { Sparkles, Save, CheckCircle2 } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
 import StepBar from '@/components/StepBar'
 import { useCase } from '@/context/CaseContext'
 import { api } from '@/lib/api'
@@ -62,8 +63,16 @@ export default function RespondPage() {
           {loadingExplain ? 'Explaining…' : 'Explain this claim in plain English'}
         </button>
         {ctx.explanation && (
-          <div className="mt-4 bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-900 leading-relaxed animate-slide-up">
-            {ctx.explanation}
+          <div className="mt-4 bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-900 leading-relaxed animate-slide-up prose prose-sm max-w-none
+            [&_h2]:text-base [&_h2]:font-bold [&_h2]:text-navy [&_h2]:mt-4 [&_h2]:mb-1
+            [&_h3]:text-sm [&_h3]:font-bold [&_h3]:text-navy [&_h3]:mt-3 [&_h3]:mb-1
+            [&_strong]:font-semibold [&_strong]:text-blue-900
+            [&_p]:mb-2 [&_p]:leading-relaxed
+            [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:space-y-1
+            [&_li]:leading-relaxed
+            [&_hr]:border-blue-200 [&_hr]:my-3
+            [&_table]:w-full [&_table]:text-xs [&_td]:py-1 [&_td]:px-2 [&_th]:py-1 [&_th]:px-2 [&_th]:font-semibold [&_table]:border-collapse [&_td]:border [&_td]:border-blue-200 [&_th]:border [&_th]:border-blue-200">
+            <ReactMarkdown>{ctx.explanation}</ReactMarkdown>
           </div>
         )}
       </div>

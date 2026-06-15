@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { User, Building2, Scale, ArrowRight, CheckCircle2 } from 'lucide-react'
+import { User, Building2, Scale, ArrowRight } from 'lucide-react'
 
 const ROLES = [
   {
@@ -52,7 +52,7 @@ export default function LandingPage() {
           <div
             key={i}
             className="flex-1 h-1 rounded-full transition-all duration-500"
-            style={{ background: i === 0 ? '#c9a227' : '#e0e0ec' }}
+            style={{ background: i === 0 ? '#c9900a' : '#d0d8f0' }}
           />
         ))}
       </div>

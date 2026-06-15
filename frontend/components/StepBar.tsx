@@ -16,7 +16,7 @@ export default function StepBar() {
             key={s}
             className="flex-1 h-1 rounded-full transition-all duration-500"
             style={{
-              background: i < currentIdx ? '#1a2b5e' : i === currentIdx ? '#c9a227' : '#e0e0ec',
+              background: i < currentIdx ? '#1a3fa0' : i === currentIdx ? '#c9900a' : '#d0d8f0',
             }}
           />
         ))}

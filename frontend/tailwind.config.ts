@@ -11,16 +11,16 @@ const config: Config = {
     extend: {
       colors: {
         navy: {
-          DEFAULT: '#1a2b5e',
-          light: '#253580',
-          50: '#eef0ff',
-          100: '#dde0ff',
+          DEFAULT: '#1a3fa0',
+          light: '#2454cc',
+          50: '#eef2ff',
+          100: '#dde8ff',
         },
         gold: {
-          DEFAULT: '#c9a227',
-          light: '#e6bb3a',
+          DEFAULT: '#c9900a',
+          light: '#e8aa20',
         },
-        surface: '#fafafe',
+        surface: '#f8faff',
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
@@ -33,13 +33,13 @@ const config: Config = {
       boxShadow: {
         card: '0 2px 16px rgba(80,80,200,0.07)',
         'card-hover': '0 6px 24px rgba(80,80,200,0.13)',
-        navy: '0 4px 14px rgba(26,43,94,0.28)',
-        'navy-lg': '0 8px 28px rgba(26,43,94,0.35)',
+        navy: '0 4px 14px rgba(26,63,160,0.28)',
+        'navy-lg': '0 8px 28px rgba(26,63,160,0.38)',
       },
       backgroundImage: {
-        'page-gradient': 'linear-gradient(145deg,#eef0fa 0%,#f4f0ff 55%,#fef4f8 100%)',
-        'landing-gradient': 'linear-gradient(145deg,#e8eaf6 0%,#ede7f6 40%,#fce4ec 100%)',
-        'navy-gradient': 'linear-gradient(135deg,#1a2b5e 0%,#253580 100%)',
+        'page-gradient': 'linear-gradient(145deg,#eef2ff 0%,#e8f0ff 55%,#fdf8ee 100%)',
+        'landing-gradient': 'linear-gradient(145deg,#dce8ff 0%,#c8d8ff 40%,#faecd0 100%)',
+        'navy-gradient': 'linear-gradient(135deg,#1a3fa0 0%,#2454cc 100%)',
       },
       animation: {
         'fade-in': 'fadeIn 0.25s ease-out',

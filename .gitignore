@@ -1,4 +1,16 @@
+# Python / Streamlit
 .venv/
 __pycache__/
 *.pyc
 .streamlit/secrets.toml
+
+# Backend secrets
+backend/.env
+
+# Next.js
+frontend/.next/
+frontend/node_modules/
+frontend/.env.local
+
+# General
+.DS_Store

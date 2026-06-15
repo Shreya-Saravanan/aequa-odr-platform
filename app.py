@@ -11,6 +11,152 @@ PERSONAS = ["Claimant (lender)", "Respondent (borrower)", "Arbitrator", "Admin"]
 DISCLAIMER = ("AI-assisted - not legal advice. A human reviews and decides at every step. "
               "Aligned with ICODR Online Dispute Resolution Standards.")
 
+CUSTOM_CSS = """
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+* { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important; }
+
+/* ── Hide Streamlit chrome ── */
+#MainMenu, footer { visibility: hidden !important; }
+[data-testid="stToolbar"], [data-testid="stDecoration"] { display: none !important; }
+[data-testid="stHeader"] { background: transparent !important; box-shadow: none !important; }
+
+/* ── Page background ── */
+[data-testid="stAppViewContainer"] {
+    background: linear-gradient(145deg, #eef0fa 0%, #f4f0ff 55%, #fef4f8 100%);
+    min-height: 100vh;
+}
+
+/* ── Sidebar ── */
+[data-testid="stSidebar"] {
+    background: #ffffff !important;
+    border-right: 1px solid #ebebf5 !important;
+    box-shadow: 4px 0 24px rgba(80,80,180,0.06) !important;
+}
+[data-testid="stSidebar"] > div:first-child { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+
+/* ── Radio → nav items ── */
+div[data-testid="stRadio"] > div { gap: 0 !important; }
+div[data-testid="stRadio"] div[data-baseweb="radio"] > div:first-child { display: none !important; }
+div[data-testid="stRadio"] label {
+    display: flex !important; align-items: center; width: 100% !important;
+    padding: 9px 16px !important; border-radius: 10px !important; margin: 1px 0 !important;
+    cursor: pointer; font-size: 14px !important; font-weight: 500 !important;
+    color: #7474a0 !important; background: transparent !important;
+    transition: background 0.15s ease, color 0.15s ease !important; border: none !important;
+}
+div[data-testid="stRadio"] label:hover { background: #f0f0fa !important; color: #1a2b5e !important; }
+div[data-testid="stRadio"] label:has(input:checked) {
+    background: #eef0ff !important; color: #1a2b5e !important; font-weight: 700 !important;
+}
+
+/* ── Selectbox ── */
+[data-testid="stSidebar"] .stSelectbox > div > div {
+    border-radius: 10px !important; border: 1.5px solid #e8e8f5 !important;
+    background: #fafafe !important; font-size: 13px !important;
+}
+
+/* ── Primary button ── */
+.stButton > button[kind="primary"] {
+    background: linear-gradient(135deg,#1a2b5e 0%,#253580 100%) !important;
+    color: #fff !important; border: none !important; border-radius: 10px !important;
+    font-weight: 600 !important; font-size: 14px !important; padding: 10px 22px !important;
+    box-shadow: 0 4px 14px rgba(26,43,94,0.28) !important;
+    transition: all 0.2s ease !important; letter-spacing: 0.2px !important;
+}
+.stButton > button[kind="primary"]:hover {
+    box-shadow: 0 6px 20px rgba(26,43,94,0.38) !important; transform: translateY(-1px) !important;
+}
+
+/* ── Secondary / outline button ── */
+.stButton > button[kind="secondary"] {
+    background: white !important; color: #1a2b5e !important;
+    border: 1.5px solid #dde0f0 !important; border-radius: 10px !important;
+    font-weight: 600 !important; font-size: 14px !important; transition: all 0.2s ease !important;
+}
+.stButton > button[kind="secondary"]:hover { background: #f0f0fa !important; border-color: #1a2b5e !important; }
+
+/* ── Download button ── */
+.stDownloadButton > button {
+    background: white !important; color: #1a2b5e !important;
+    border: 1.5px solid #dde0f0 !important; border-radius: 10px !important;
+    font-weight: 600 !important; transition: all 0.2s ease !important;
+}
+.stDownloadButton > button:hover { background: #f0f0fa !important; border-color: #1a2b5e !important; }
+
+/* ── Form submit ── */
+div[data-testid="stFormSubmitButton"] > button {
+    background: linear-gradient(135deg,#1a2b5e 0%,#253580 100%) !important;
+    color: white !important; border: none !important; border-radius: 10px !important;
+    font-weight: 600 !important; padding: 10px 22px !important;
+    box-shadow: 0 4px 14px rgba(26,43,94,0.28) !important; transition: all 0.2s ease !important;
+}
+div[data-testid="stFormSubmitButton"] > button:hover {
+    box-shadow: 0 6px 20px rgba(26,43,94,0.38) !important; transform: translateY(-1px) !important;
+}
+
+/* ── Form container ── */
+[data-testid="stForm"] {
+    border: 1.5px solid #ebebf5 !important; border-radius: 14px !important;
+    background: #fafafe !important; box-shadow: 0 2px 8px rgba(80,80,180,0.04) !important;
+}
+
+/* ── Inputs ── */
+.stTextInput > div > div > input,
+.stTextArea > div > div > textarea,
+.stNumberInput > div > div > input {
+    border-radius: 8px !important; border: 1.5px solid #e0e0f0 !important;
+    background: white !important; font-size: 14px !important; color: #2a2a4a !important;
+    transition: border-color 0.2s, box-shadow 0.2s !important;
+}
+.stTextInput > div > div > input:focus,
+.stTextArea > div > div > textarea:focus,
+.stNumberInput > div > div > input:focus {
+    border-color: #1a2b5e !important; box-shadow: 0 0 0 3px rgba(26,43,94,0.1) !important;
+}
+.stSelectbox > div > div { border-radius: 8px !important; border: 1.5px solid #e0e0f0 !important; background: white !important; }
+.stTextInput label, .stTextArea label, .stNumberInput label,
+.stSelectbox label, .stToggle label {
+    font-size: 13px !important; font-weight: 600 !important; color: #5a5a7a !important;
+}
+
+/* ── Metric ── */
+[data-testid="stMetric"] {
+    background: linear-gradient(135deg,#1a2b5e 0%,#2d3f7a 100%) !important;
+    border-radius: 14px !important; padding: 16px 20px !important;
+    box-shadow: 0 4px 20px rgba(26,43,94,0.22) !important;
+}
+[data-testid="stMetric"] label { color: rgba(255,255,255,0.7) !important; font-size: 12px !important; }
+[data-testid="stMetricValue"] { color: white !important; }
+
+/* ── Alerts ── */
+.stSuccess { border-radius: 10px !important; }
+.stInfo    { border-radius: 10px !important; }
+.stWarning { border-radius: 10px !important; }
+
+/* ── Expander ── */
+[data-testid="stExpander"] {
+    border: 1.5px solid #ebebf5 !important; border-radius: 10px !important; background: white !important;
+}
+
+/* ── Divider ── */
+hr { border: none !important; border-top: 1.5px solid #ebebf5 !important; margin: 20px 0 !important; }
+
+/* ── Typography ── */
+h1,h2,h3 { color: #1a2b5e !important; font-weight: 700 !important; letter-spacing: -0.3px !important; }
+h4,h5 { color: #2a2a4a !important; font-weight: 600 !important; }
+p { color: #3a3a5a; line-height: 1.6; }
+[data-testid="stCaptionContainer"] p { color: #9494b0 !important; font-size: 12.5px !important; }
+[data-testid="stSidebar"] h1 {
+    font-size: 20px !important; font-weight: 800 !important;
+    color: #1a2b5e !important; letter-spacing: -0.5px !important;
+}
+
+/* ── Disabled textarea (hearing transcript) ── */
+.stTextArea [disabled] { background: #f8f8fd !important; color: #4a4a6a !important; border-color: #ebebf5 !important; }
+</style>
+"""
+
 # ---- session state (guarded init) ----
 if "case" not in st.session_state:
     st.session_state.case = build_seed_case()
@@ -141,6 +287,29 @@ def award_to_markdown(case) -> str:
         f"*{DISCLAIMER}*",
     ]
     return "\n".join(lines)
+
+
+def render_stage_header():
+    current_idx = STAGES.index(st.session_state.stage)
+    segments = "".join(
+        f'<div style="flex:1;height:4px;border-radius:4px;margin:0 3px;background:'
+        f'{"#1a2b5e" if i < current_idx else ("#c9a227" if i == current_idx else "#dde0ec")}'
+        f';transition:background 0.3s;"></div>'
+        for i in range(len(STAGES))
+    )
+    st.markdown(
+        f'<div style="display:flex;align-items:center;margin:-8px 0 6px 0;">{segments}</div>'
+        f'<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">'
+        f'<span style="font-size:24px;font-weight:800;color:#1a2b5e;letter-spacing:-0.5px;">'
+        f'{st.session_state.stage}</span>'
+        f'<span style="font-size:11px;font-weight:700;color:#b0b0c8;letter-spacing:1px;">'
+        f'STEP {current_idx + 1} OF {len(STAGES)}</span></div>',
+        unsafe_allow_html=True,
+    )
+    st.caption(
+        f"{st.session_state.case.title}  ·  {st.session_state.case.case_id}"
+        f"  ·  {st.session_state.persona}"
+    )
 
 
 def render_intake():
@@ -396,15 +565,31 @@ RENDERERS = {
     "Respond": render_respond, "Review": render_review, "Hearing": render_hearing, "Award": render_award,
 }
 
+st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
+
 with st.sidebar:
-    st.title("Aequa ODR")
-    st.caption("AI-assisted online dispute resolution")
-    st.session_state.stage = st.radio("Case lifecycle", STAGES, index=STAGES.index(st.session_state.stage))
-    st.session_state.persona = st.selectbox("Viewing as", PERSONAS, index=PERSONAS.index(st.session_state.persona))
-    st.caption(f"Stage {STAGES.index(st.session_state.stage) + 1} of {len(STAGES)}")
+    st.markdown(
+        '<div style="padding:0 8px 20px 8px;">'
+        '<div style="font-size:19px;font-weight:900;color:#1a2b5e;letter-spacing:-0.5px;">'
+        'AEQUA <span style="color:#c9a227;">⚖</span> ODR</div>'
+        '<div style="font-size:10px;color:#b0b0c8;font-weight:600;margin-top:3px;letter-spacing:1px;">'
+        'AI-ASSISTED DISPUTE RESOLUTION</div></div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        '<p style="font-size:10px;font-weight:700;color:#b0b0c8;letter-spacing:1.5px;'
+        'padding:0 8px;margin:0 0 4px 0;">CASE LIFECYCLE</p>',
+        unsafe_allow_html=True,
+    )
+    st.session_state.stage = st.radio(
+        "stage", STAGES, index=STAGES.index(st.session_state.stage), label_visibility="collapsed"
+    )
     st.divider()
-    st.caption(f"Case: {st.session_state.case.title}")
-    st.markdown("**Case file**")
+    st.markdown(
+        '<p style="font-size:10px;font-weight:700;color:#b0b0c8;letter-spacing:1.5px;'
+        'padding:0 8px;margin:0 0 6px 0;">CASE FILE</p>',
+        unsafe_allow_html=True,
+    )
     _c = st.session_state.case
     _chk = lambda ok: "✅" if ok else "—"
     st.caption(f"📄 Documents: {len(_c.documents)}")
@@ -415,10 +600,30 @@ with st.sidebar:
     _award_ok = _c.draft_award is not None
     _finalized = st.session_state.award_finalized
     st.caption(f"{_chk(_award_ok)} Draft award{'  🔒 Finalized' if _finalized else ''}")
+    st.divider()
+    st.markdown(
+        '<p style="font-size:10px;font-weight:700;color:#b0b0c8;letter-spacing:1.5px;'
+        'padding:0 8px;margin:0 0 4px 0;">VIEWING AS</p>',
+        unsafe_allow_html=True,
+    )
+    st.session_state.persona = st.selectbox(
+        "persona", PERSONAS, index=PERSONAS.index(st.session_state.persona), label_visibility="collapsed"
+    )
+    st.markdown(
+        f'<div style="margin-top:12px;padding:12px 14px;background:#f4f4fa;border-radius:10px;">'
+        f'<div style="font-size:10px;color:#b0b0c8;font-weight:600;letter-spacing:0.5px;">CASE ID</div>'
+        f'<div style="font-size:13px;font-weight:700;color:#1a2b5e;margin-top:2px;">'
+        f'{st.session_state.case.case_id}</div>'
+        f'<div style="font-size:11px;color:#9494b0;margin-top:2px;">'
+        f'Stage {STAGES.index(st.session_state.stage) + 1} of {len(STAGES)}</div></div>',
+        unsafe_allow_html=True,
+    )
 
-st.markdown(f"### {st.session_state.stage}")
-st.caption(f"{st.session_state.case.title}  |  {st.session_state.case.case_id}  |  Viewing as: {st.session_state.persona}")
+render_stage_header()
 st.divider()
 RENDERERS[st.session_state.stage]()
 st.divider()
-st.caption(DISCLAIMER)
+st.markdown(
+    f'<p style="font-size:11.5px;color:#b0b0c8;text-align:center;padding:4px 0;">{DISCLAIMER}</p>',
+    unsafe_allow_html=True,
+)

@@ -11,14 +11,14 @@ const config: Config = {
     extend: {
       colors: {
         navy: {
-          DEFAULT: '#1a3fa0',
-          light: '#2454cc',
-          50: '#eef2ff',
-          100: '#dde8ff',
+          DEFAULT: '#1e40af',
+          light: '#2563eb',
+          50: '#eff6ff',
+          100: '#dbeafe',
         },
         gold: {
-          DEFAULT: '#c9900a',
-          light: '#e8aa20',
+          DEFAULT: '#d97706',
+          light: '#f59e0b',
         },
         surface: '#f8faff',
       },
@@ -33,13 +33,13 @@ const config: Config = {
       boxShadow: {
         card: '0 2px 16px rgba(80,80,200,0.07)',
         'card-hover': '0 6px 24px rgba(80,80,200,0.13)',
-        navy: '0 4px 14px rgba(26,63,160,0.28)',
-        'navy-lg': '0 8px 28px rgba(26,63,160,0.38)',
+        navy: '0 4px 14px rgba(30,64,175,0.3)',
+        'navy-lg': '0 8px 28px rgba(30,64,175,0.42)',
       },
       backgroundImage: {
-        'page-gradient': 'linear-gradient(145deg,#eef2ff 0%,#e8f0ff 55%,#fdf8ee 100%)',
-        'landing-gradient': 'linear-gradient(145deg,#dce8ff 0%,#c8d8ff 40%,#faecd0 100%)',
-        'navy-gradient': 'linear-gradient(135deg,#1a3fa0 0%,#2454cc 100%)',
+        'page-gradient': 'linear-gradient(145deg,#eff6ff 0%,#dbeafe 40%,#fef9ee 100%)',
+        'landing-gradient': 'linear-gradient(145deg,#bfdbfe 0%,#93c5fd 30%,#fde68a 100%)',
+        'navy-gradient': 'linear-gradient(135deg,#1e40af 0%,#2563eb 100%)',
       },
       animation: {
         'fade-in': 'fadeIn 0.25s ease-out',

@@ -52,7 +52,7 @@ export default function LandingPage() {
           <div
             key={i}
             className="flex-1 h-1 rounded-full transition-all duration-500"
-            style={{ background: i === 0 ? '#c9900a' : '#d0d8f0' }}
+            style={{ background: i === 0 ? '#d97706' : '#bfdbfe' }}
           />
         ))}
       </div>
